@@ -29,8 +29,8 @@ export default function LoginPage() {
       <form className="flex flex-col gap-2 w-64">
         <input className="border p-2 rounded text-black" type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
         <input className="border p-2 rounded text-black" type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
-        <button onClick={handleLogin} className="bg-blue-600 text-white p-2 rounded">Login</button>
-        <button onClick={handleSignUp} className="text-sm text-gray-500 mt-2 text-center underline">Sign Up</button>
+        <button onClick={handleLogin} className="cursor-pointer bg-blue-600 text-white p-2 rounded">Login</button>
+        <button onClick={handleSignUp} className="cursor-pointer text-sm text-gray-500 mt-2 text-center underline">Sign Up</button>
       </form>
     </div>
   );
