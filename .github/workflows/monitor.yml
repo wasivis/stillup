@@ -2,8 +2,8 @@ name: StillUp Site Monitor
 
 on:
   schedule:
-    - cron: '*/30 * * * *' # This runs every 30 minutes
-  workflow_dispatch:      # This adds a "Run Now" button in GitHub
+    - cron: '*/30 * * * *' # Runs every 30 minutes
+  workflow_dispatch:      # Allows you to click a "Run Now" button
 
 jobs:
   ping:
@@ -18,10 +18,11 @@ jobs:
           python-version: '3.10'
 
       - name: Install Dependencies
-        run: pip install supabase requests
+        run: pip install supabase requests python-dotenv
 
       - name: Run Pinger
         env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          # GitHub will pull these from your "Secrets" (Step 2)
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
         run: python pinger.py
