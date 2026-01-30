@@ -89,6 +89,15 @@ const handleAddSite = async (e: React.FormEvent) => {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
+    try {
+      const host = window.location.hostname.split(':')[0];
+      const hostPrefix = host.split('.')[0] || host;
+      const cookieName = `sb-${hostPrefix}-auth-token`;
+      document.cookie = `${cookieName}=; path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+      console.log('Cleared auth cookie:', cookieName);
+    } catch (e) {
+      console.warn('Failed to clear auth cookie:', e);
+    }
     router.push("/login"); // Send them back to login after signing out
   };
 
