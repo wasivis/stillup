@@ -49,28 +49,30 @@ export default function Dashboard() {
     };
   }, []); // Empty array means "only run once on load"
 
-const handleAddSite = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setIsSubmitting(true);
+  const handleAddSite = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
 
-  const { data: { user } } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
-  const { error } = await supabase
-    .from('sites')
-    .insert([{ 
-      url: newUrl, 
-      user_id: user?.id,
-      status: 'pending' // Explicitly set it so the UI knows
-    }]);
+    const { error } = await supabase.from("sites").insert([
+      {
+        url: newUrl,
+        user_id: user?.id,
+        status: "pending", // Explicitly set it so the UI knows
+      },
+    ]);
 
-  if (error) {
-    alert(error.message);
-  } else {
-    setNewUrl("");
-    await loadSites();
-  }
-  setIsSubmitting(false);
-};
+    if (error) {
+      alert(error.message);
+    } else {
+      setNewUrl("");
+      await loadSites();
+    }
+    setIsSubmitting(false);
+  };
 
   const handleDeleteSite = async (id: string) => {
     const confirmDelete = confirm("Are you sure you want to remove this site?");
@@ -90,13 +92,13 @@ const handleAddSite = async (e: React.FormEvent) => {
   const handleLogout = async () => {
     await supabase.auth.signOut();
     try {
-      const host = window.location.hostname.split(':')[0];
-      const hostPrefix = host.split('.')[0] || host;
+      const host = window.location.hostname.split(":")[0];
+      const hostPrefix = host.split(".")[0] || host;
       const cookieName = `sb-${hostPrefix}-auth-token`;
       document.cookie = `${cookieName}=; path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT`;
-      console.log('Cleared auth cookie:', cookieName);
+      console.log("Cleared auth cookie:", cookieName);
     } catch (e) {
-      console.warn('Failed to clear auth cookie:', e);
+      console.warn("Failed to clear auth cookie:", e);
     }
     router.push("/login"); // Send them back to login after signing out
   };
@@ -121,23 +123,23 @@ const handleAddSite = async (e: React.FormEvent) => {
   }, []);
 
   useEffect(() => {
-  // 1. Create a "Pipe" to Supabase
-  const channel = supabase
-    .channel('realtime-sites')
-    .on(
-      'postgres_changes',
-      { event: 'UPDATE', schema: 'public', table: 'sites' },
-      (payload) => {
-        console.log('Change received!', payload);
-        loadSites(); // Refresh the list automatically!
-      }
-    )
-    .subscribe();
+    // 1. Create a "Pipe" to Supabase
+    const channel = supabase
+      .channel("realtime-sites")
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "sites" },
+        (payload) => {
+          console.log("Change received!", payload);
+          loadSites(); // Refresh the list automatically!
+        },
+      )
+      .subscribe();
 
-  return () => {
-    supabase.removeChannel(channel);
-  };
-}, [supabase, loadSites]);
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [supabase, loadSites]);
 
   return (
     <div className="p-8 max-w-2xl mx-auto min-h-screen bg-gray-50">
@@ -178,7 +180,6 @@ const handleAddSite = async (e: React.FormEvent) => {
           Add Site
         </button>
       </form>
-
       {/* Sites List Section */}
       <div className="space-y-4">
         <div className="flex justify-between items-end mb-4 border-b border-slate-200 pb-2">
@@ -257,6 +258,20 @@ const handleAddSite = async (e: React.FormEvent) => {
           ))
         )}
       </div>
+      <div className="mt-12 flex justify-center">
+        <a
+          href="https://ko-fi.com/I2I814OYFR"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="transition-transform hover:scale-105 active:scale-95"
+        >
+          <img
+            src="https://storage.ko-fi.com/cdn/kofi6.png?v=6"
+            alt="Buy Me a Coffee at ko-fi.com"
+            className="h-9 border-0"
+          />
+        </a>
+      </div>{" "}
     </div>
   );
 }

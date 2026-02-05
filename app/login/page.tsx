@@ -21,14 +21,8 @@ export default function LoginPage() {
 
   const handleLogin = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
-    console.log('Attempting login for', email);
-    // Diagnostic: ensure the client has the supabase env values (do not print keys)
-    console.log('SUPABASE URL', process.env.NEXT_PUBLIC_SUPABASE_URL, 'HAS_ANON_KEY?', !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
-
     try {
       const res = await supabase.auth.signInWithPassword({ email, password });
-      console.log('signInWithPassword result:', res);
-
       // Supabase returns { data, error }
       if (res.error) {
         console.error('Login error:', res.error);
@@ -38,7 +32,7 @@ export default function LoginPage() {
 
       // If a session was created, redirect. Otherwise, show info.
       if (res.data?.session) {
-        console.log('Login successful, session:', res.data.session);
+        console.log('Login successful');
         try {
           const session = res.data.session;
           const host = window.location.hostname.split(':')[0];
