@@ -1,36 +1,38 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<div align="center">
+  <h1>📡 StillUp</h1>
+  <p><strong>Automated Uptime Monitoring & Status Tracking</strong></p>
+  
+  <p>
+    <img src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white" />
+    <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" />
+    <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" />
+    <img src="https://img.shields.io/badge/Cron_Job-444444?style=for-the-badge&logo=clockify&logoColor=white" />
+  </p>
+</div>
 
-## Getting Started
+---
 
-First, run the development server:
+## 📖 Overview
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+StillUp is a lightweight, reliable service monitoring tool that ensures your web applications stay online. It provides automated status checks, historical uptime data, and a clean dashboard for developers to monitor their digital assets at a glance.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## ✨ Key Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+* **Automated 30-Minute Polling:** A background worker triggers every 30 minutes to ping registered URLs and log response codes.
+* **Real-time Status Dashboard:** Visual indicators (Online/Offline) with timestamped history of the last successful check.
+* **Response Time Tracking:** Measures and stores latency data to identify performance degradation over time.
+* **Multi-User Monitoring:** Allows users to manage a personal watchlist of critical services.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🛠️ Technical Deep Dive
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 1. The Monitoring Engine
+Built with Node.js, the engine performs asynchronous `HEAD` or `GET` requests to minimize bandwidth while accurately detecting server availability. It handles redirects, timeouts, and SSL errors gracefully to prevent false positives.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 2. Scheduled Tasks (Cron)
+StillUp utilizes **Vercel Cron Jobs** (or a similar scheduling layer) to maintain a consistent 30-minute heartbeat. This ensures the monitoring logic runs independently of user sessions.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 3. Data Persistence & Trends
+- **Database:** PostgreSQL stores a time-series log of every "ping" event.
+- **Relational Logic:** Links uptime events to specific user-owned URLs, allowing for personalized "Uptime Percentage" calculations.
